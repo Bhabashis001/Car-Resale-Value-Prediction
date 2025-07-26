@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Car Selling Price Predictor</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Car Selling Price Predictor</h1>
+    <form id="predictionForm">
+      <div class="form-group">
+        <label for="name">Car Name:</label>
+        <input type="text" id="name" name="name" placeholder="e.g. Honda City" required />
+      </div>
+      <div class="form-group">
+        <label for="year">Year:</label>
+        <input type="number" id="year" name="year" placeholder="e.g. 2012" required />
+      </div>
+      <div class="form-group">
+        <label for="km_driven">Kilometers Driven:</label>
+        <input type="number" id="km_driven" name="km_driven" placeholder="e.g. 65000" required />
+      </div>
+      <div class="form-group">
+        <label for="mileage">Mileage (km/ltr/kg):</label>
+        <input type="number" step="0.1" id="mileage" name="mileage" placeholder="e.g. 12" required />
+      </div>
+      <div class="form-group">
+        <label for="engine">Engine (cc):</label>
+        <input type="number" step="0.1" id="engine" name="engine" placeholder="e.g. 1999" required />
+      </div>
+      <div class="form-group">
+        <label for="max_power">Max Power (bhp):</label>
+        <input type="number" step="0.1" id="max_power" name="max_power" placeholder="e.g. 124" required />
+      </div>
+      <div class="form-group">
+        <label for="seats">Seats:</label>
+        <input type="number" id="seats" name="seats" placeholder="e.g. 5" required />
+      </div>
+      <div class="form-group">
+        <label for="owner">Owner (e.g., 1 for First Owner):</label>
+        <input type="number" id="owner" name="owner" placeholder="e.g. 1" required />
+      </div>
+      <div class="form-group">
+        <label for="fuel">Fuel Type:</label>
+        <select id="fuel" name="fuel" required>
+          <option value="CNG">CNG</option>
+          <option value="Diesel">Diesel</option>
+          <option value="Petrol" selected>Petrol</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="seller_type">Seller Type:</label>
+        <select id="seller_type" name="seller_type" required>
+          <option value="Individual" selected>Individual</option>
+          <option value="Trustmark Dealer">Trustmark Dealer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="transmission">Transmission:</label>
+        <select id="transmission" name="transmission" required>
+          <option value="Automatic">Automatic</option>
+          <option value="Manual" selected>Manual</option>
+        </select>
+      </div>
+      <button type="submit" id="predictBtn">Predict Selling Price</button>
+    </form>
+    <div id="loader" class="loader" style="display: none;"></div>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.getElementById('predictionForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      document.getElementById('loader').style.display = 'block';
+      document.getElementById('result').innerHTML = '';
+      var formData = new FormData(this);
+      fetch('backend.php', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('loader').style.display = 'none';
+        if (data.predicted_price) {
+          document.getElementById('result').innerHTML = '<p class="success">Predicted Selling Price: <strong>' + data.predicted_price + '</strong></p>';
+        } else {
+          document.getElementById('result').innerHTML = '<p class="error">Error: ' + data.error + '</p>';
+        }
+      })
+      .catch(error => {
+        document.getElementById('loader').style.display = 'none';
+        console.error('Error:', error);
+        document.getElementById('result').innerHTML = '<p class="error">An error occurred. Please try again.</p>';
+      });
+    });
+  </script>
+</body>
+</html>
