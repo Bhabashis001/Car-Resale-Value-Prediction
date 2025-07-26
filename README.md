@@ -82,6 +82,11 @@ A full-stack machine learning web app that predicts used car resale prices based
 ---
 
 ## 📦 Requirements (Python)
-```bash
+
 pip install numpy joblib scikit-learn
+
+<img width="375" height="587" alt="Screenshot 2025-07-26 at 12 57 28 PM" src="https://github.com/user-attachments/assets/c8234f5e-58e1-44ad-b8d5-4b921f5bd46e" />
+
+
+
 
